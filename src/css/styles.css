@@ -1,0 +1,156 @@
+@import url("https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap");
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.dlm-block {
+  background-color: #f1f0ef;
+  text-align: center;
+}
+.dlm-block, .dlm-block label, .dlm-block select, .dlm-block option, .dlm-block p, .dlm-block div, .dlm-block button, .dlm-block a {
+  font-family: "Source Sans Pro", "Helvetica Neue Light", sans-serif;
+  font-size: 18px;
+  line-height: 26px;
+  color: #666666;
+}
+.dlm-block div, .dlm-block h5, .dlm-block input, .dlm-block select, .dlm-block li, .dlm-block option, .dlm-block ul, .dlm-block button, .dlm-block p {
+  box-sizing: border-box;
+}
+.dlm-block h5 {
+  font-size: 20px;
+  font-weight: 300;
+  margin: 12.5px 0;
+  padding: 0;
+}
+.dlm-block p {
+  margin: 0;
+  padding: 0;
+}
+.dlm-block ul, .dlm-block li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.dlm-block ul:empty {
+  display: none;
+}
+.dlm-block select, .dlm-block option {
+  line-height: 36px;
+  height: 36px;
+  display: block;
+  font-size: 18px;
+  outline: 0;
+  padding: 0 10px;
+  color: #666666;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.dlm-block a {
+  color: #FF8200 !important;
+  text-decoration: none;
+}
+.dlm-block a:hover {
+  text-decoration: underline;
+}
+.dlm-block a:active {
+  text-decoration: underline;
+}
+.dlm-block label.dlm-radio,
+.dlm-block label.dlm-checkbox {
+  box-sizing: border-box;
+  display: block;
+  margin-bottom: 5px;
+  padding-left: 26px;
+  position: relative;
+}
+.dlm-block label.dlm-radio::after,
+.dlm-block label.dlm-checkbox::after {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  border: 1px solid #3b3e43;
+  content: " ";
+  overflow: hidden;
+  background-color: #ffffff;
+}
+.dlm-block label.dlm-radio.dlm-selected::after,
+.dlm-block label.dlm-checkbox.dlm-selected::after {
+  background-color: #FF8200;
+  border: 0;
+}
+.dlm-block label.dlm-radio::after {
+  border-radius: 10px;
+}
+.dlm-block label.dlm-checkbox.dlm-selected::after {
+  content: "c";
+  text-align: center;
+  line-height: 20px;
+  font-size: 14px;
+  color: white;
+  vertical-align: middle;
+}
+.dlm-block button.dlm-download-btn {
+  line-height: 60px;
+  height: 60px;
+  display: block;
+  width: 100%;
+  font-size: 32px;
+  text-align: center;
+  padding: 0 15px;
+  background-color: #FF8200;
+  color: #ffffff;
+  border: 0;
+  outline: 0;
+  border-radius: 30px;
+}
+.dlm-block .dlm-container {
+  display: inline-block;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0;
+  padding: 60px 15px;
+}
+.dlm-block .dlm-container .dlm-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0 15px;
+}
+.dlm-block .dlm-container .dlm-row.dlm-action {
+  padding-top: 15px;
+  justify-content: space-around;
+}
+.dlm-block .dlm-container .dlm-row .dlm-col {
+  width: 33.33333333%;
+  flex-shrink: 0;
+  flex-grow: 0;
+  text-align: left;
+  padding: 0 15px;
+}
+.dlm-block .dlm-container .dlm-row .dlm-col .dlm-details-list > .dlm-details-item {
+  font-size: 0.75em;
+}
+.dlm-block .dlm-container .dlm-row.dlm-divider {
+  height: 60px;
+  position: relative;
+}
+.dlm-block .dlm-container .dlm-row.dlm-divider::after {
+  height: 30px;
+  position: absolute;
+  display: block;
+  bottom: 0;
+  width: 100%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #999;
+  content: " ";
+}
+
+/*# sourceMappingURL=styles.css.map */

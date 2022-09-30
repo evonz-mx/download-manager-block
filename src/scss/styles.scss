@@ -1,0 +1,191 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+
+body {
+    margin:0;
+    padding:0;
+}
+
+.dlm-block {
+    
+    $orange:#FF8200;
+    $dark-gray: #3b3e43;
+    $text-gray: #666666;
+    $white: #ffffff;
+    $font-family: 'Source Sans Pro', 'Helvetica Neue Light', sans-serif;
+    $font-size:18px;
+    background-color: #f1f0ef;
+    text-align:center;
+
+    &, & label, & select, & option, & p, & div, & button, & a {
+        font-family: $font-family;
+        font-size:$font-size;
+        line-height:26px;
+        color:$text-gray;
+    }
+
+    div, h5, input, select, li, option, ul, button, p {
+        box-sizing: border-box;
+    }
+
+    h5 {
+        font-size:20px;
+        font-weight: 300;
+        margin:12.5px 0;
+        padding:0;
+    }
+
+    p {
+        margin:0;
+        padding:0;
+    }
+
+    ul, li {
+        list-style:none;
+        padding:0;
+        margin:0;
+    }
+
+    ul:empty {
+        display:none;
+    }
+
+    select, option {
+        line-height:36px;
+        height:36px;
+        display:block;
+        font-size: 18px;
+        outline: 0;
+        padding: 0 10px;
+        color: $text-gray;
+        background-color: $white;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    a {
+        color: $orange !important;
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+
+        &:active {
+            text-decoration: underline;
+        }
+    }
+
+
+    label.dlm-radio,
+    label.dlm-checkbox {
+        box-sizing: border-box;
+        display:block;
+        margin-bottom:5px;
+        padding-left:26px;
+        position:relative;
+
+        &::after {
+            box-sizing: border-box;
+            display:block;
+            position:absolute;
+            top:0;
+            left:0;
+            height:20px;
+            width:20px;
+            border:1px solid $dark-gray;
+            content: ' ';
+            overflow:hidden;
+            background-color:$white;
+        }
+
+        &.dlm-selected {
+            &::after {
+                background-color: $orange;
+                border:0;
+            }
+        }
+    }
+
+    label.dlm-radio {
+        &::after {
+            border-radius: 10px;
+        }
+    }
+
+    label.dlm-checkbox {
+        &.dlm-selected {
+            &::after {
+                content:'c';
+                text-align: center;
+                line-height: 20px;
+                font-size:14px;
+                color:white;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    button.dlm-download-btn {
+        line-height:60px;
+        height:60px;
+        display:block;
+        width:100%;
+        font-size:32px;
+        text-align:center;
+        padding: 0 15px;
+        background-color:$orange;
+        color:$white;
+        border:0;
+        outline:0;
+        border-radius:30px;
+    }
+
+    .dlm-container {
+        display:inline-block;
+        max-width:1200px;
+        width:100%;
+        margin:0;
+        padding:60px 15px;
+
+        .dlm-row {
+            display:flex;
+            flex-direction:row;
+            flex-wrap:nowrap;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 0 15px;
+
+            &.dlm-action {
+                padding-top:15px;
+                justify-content: space-around;
+            }
+
+            .dlm-col {
+                width:33.33333333%;
+                flex-shrink: 0;
+                flex-grow: 0;
+                text-align: left;
+                padding: 0 15px;
+                .dlm-details-list>.dlm-details-item {
+                    font-size: 0.75em;
+                }
+            }
+
+            &.dlm-divider {
+                height:60px;
+                position:relative;
+
+                &::after {
+                    height:30px;
+                    position:absolute;
+                    display:block;
+                    bottom:0;
+                    width:100%;
+                    left:0;
+                    right:0;
+                    border-top:1px solid #999;
+                    content:' ';
+                }
+            }
+        }
+    }
+}
