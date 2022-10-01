@@ -43,106 +43,107 @@ var DLMChangeLog = function() {
     }
 }
 
-var DLMListItem = function(props) {
-    this.data = {};
-    this.element = null;
-    this.is_visible;
-    this.is_checked;
+var DLMListItem = function(list_item_data,parent) {
+    this.data = {visible:false,selected:false,parent:parent};
+    this.element;
 
-    this.create_element = () => {
-        let element = $('div');
-        this.data;
-        return element;
+    this._construct = (list_item_data) => {
+        Object.assign(this.data, list_item_data);
+        this.element = DLMList.create_element(this.data).on('click',this.toggle);
     }
 
-    this.set_checked = (cbool) => {
-        if (this.checked === cbool) {
-            return;
+    this.toggle = () => {
+        let selected = !this.get('selected');
+        let url = this.data.url;
+        let dl_index = this.data.parent.download_list.indexOf(url);
+        this.set('selected', selected);
+        if (selected) {
+            if (dl_index === -1) {
+                this.data.parent.download_list.push(url);
+                this.element.find('label').addClass('dlm-selected');
+            }
+        } else {
+            if (dl_index !== -1) {
+                this.data.parent.download_list.splice(dl_index,1);
+                this.element.find('label').removeClass('dlm-selected');
+            }
         }
-        this.checked = cbool;
     }
 
-    this.toggle_checked = () => {
-        this.set_checked(this.is_checked ? true : false);
+    this.set = (key,val) => {
+        this.data[key] = val;
     }
 
-    this.bind_data = (key,val) => {
-        let true_key =+ 'dlm-';
-        this.data[true_key] = val;
-    }
-
-    this.fetch_data = (key) => {
-        let true_key =+ 'dlm-';
-        if (this.data.hasOwnProperty(true_key)) {
-            return this.data[true_key];
+    this.get = (key) => {
+        if (this.data.hasOwnProperty(key)) {
+            return this.data[key];
         } else {
             console.error('error: undefined data key ', key);
             return null;
         }
     }
 
-    this.init = (props) => {
-        let input_keys = [];
-        let input = {};
+    this.refresh_visibility = function(filters,parent) {
+        let visible = (this.get('os_slug') === filters.os.value);
+        let changed = !(this.get('visible') === visible);
+        let selected = (this.get('selected'));
+        let url = this.get('url');
+        let dl_index = parent.parent.download_list.indexOf(url);
 
-        for (prop_key in props) {
-            if (props.hasOwnProperty(prop_key)) {
-                input[prop_key] = props[prop_key];
-                input_keys.push(prop_key);
+        if (changed) {
+            this.set('visible',visible);
+            if (visible) {
+                this.element.appendTo(parent.element);
+                if (selected) {
+                    if (dl_index === -1) {
+                        parent.parent.download_list.push(url);
+                    }
+                }
+            } else {
+                this.element.appendTo(parent.trash);
+                if (dl_index !== -1) {
+                    parent.parent.download_list.splice(dl_index,1);
+                }
             }
         }
-
-        this.element = this.create_element();
-        this.parent_element = input.container;
     }
 
-    this.refresh_visibility = function(filters) {
-        this.is_visible = (this.os_slug === filters.os.value);
-    }
-
-    // this.bind_data('parent', null);
-    this.element = this.create_element();
+    this._construct(list_item_data);
 }
 
-var DLMList = function(name, data, container, parent_obj) {
+var DLMList = function(...args) {
 
-    /** get rid of these... */
-    this.name = name;
-    this.container = container;
-    this.parent = parent_obj;
-    this.parent_el = parent_obj.el;
-    this.parent_id = this.parent_el.attr('id');
-    this.data = [];
-    /** end get rid of these... */
-
-    this._dlm
-    this._dlm_list = this;
-    this._dlm_list_items = [];
-
-    this.dom_element = container;
-    this.title = name;
+    this.title;
+    this.element;
+    this.parent = args[3];
+    this.trash;
+    this.list_items = [];
 
     this.filters = {
         os: {
             key: 'os',
             value: null,
             changed: false,
-            changed_from: null,
+            from: null,
         },
         version: {
             key: 'version',
             value: null,
             changed: false,
-            changed_from: null,
+            from: null,
         },
     };
 
-    /*
-    for (key in data) {
-        let transformed_data = this.transform_data(data);
-        this._dlm_list_items.push(new DLMListItem(transformed_data));
+    this._construct = function(args_arr) {
+        this.title = args_arr[0];
+        this.element = args_arr[2];        
+        let list_items = args_arr[1];
+        this.trash = $('<div style="display:none;"></div>');
+        for (let key in list_items) {
+            this.list_items.push(new DLMListItem(list_items[key],this.parent));
+        }
     }
-    */
+
     this.transform_data = function(data) {
         return data;
     }
@@ -152,42 +153,26 @@ var DLMList = function(name, data, container, parent_obj) {
      * identifiable by key
      */
     this.set_filter = function(key, value) {
-        value = !!value;
-        if (this.filters.hasOwnProperty(key) && (value !== !!this.filters[key].value)) {
-            this.filters[key].from = this.filters[key].value;            
+        
+        if (this.filters.hasOwnProperty(key) && (value !== this.filters[key].value)) {
+            this.filters[key].from = this.filters[key].value;
             this.filters[key].changed = true;
             this.filters[key].value = value;
         }
-    }
 
-    /**
-     * Function for bulk updating filters
-     * 
-     * nd object in which prop keys represent the filter
-     * to set, and prop vals represent the new value to
-     * set it to
-     * 
-     * @param {*} filters 
-     */
-    this.bulk_set_filters = function(filters) {
-        for (key in filters) {
-            this.set_filter(key, filters[key]);
-        }
         this.refresh_visibility();
     }
 
     /**
      * Iterates through DLMListItems to determine,
-     * which view states need to change based on
-     * filter changes
      */
     this.refresh_visibility = function() {
-        for (index in this._dlm_list_items) {
-            if (!this._dlm_list_items.hasOwnProperty(index)) {
+        for (index in this.list_items) {
+            if (!this.list_items.hasOwnProperty(index)) {
                 continue;
             }
-            dlm_list_item = this._dlm_list_items[index];
-            dlm_list_item.refresh_visibility(this.filters);
+            list_item = this.list_items[index];
+            list_item.refresh_visibility(this.filters, this);
         }
         for (key in this.filters) {
             if (!this.filters.hasOwnProperty(key)) continue;
@@ -196,110 +181,7 @@ var DLMList = function(name, data, container, parent_obj) {
         }
     }
 
-    /**
-     * Returns all list items that are both visible,
-     * and currently selected (list to download)
-     */
-    this.fetch_selected_items= function() {
-
-    }
-
-
-    /** 
-     *  todo: refactor 
-     **/
-
-    for (index in data) {
-        this.data.push(Object.assign({
-            is_checked: false,
-            is_visible: false
-        }, data[index]));
-    }
-
-    /**
-     * todo: map data outside of filter
-     */
-
-
-
-    this.filter = function() {
-        var os = this.parent.os_select.val();
-        // var version = this.parent.version_select.val();
-        var changes = [];
-        var parent = this;
-
-        this.data = this.data.map(function(data_obj, index) {
-            visible_changed = false;
-            checked_changed = false;
-            index = index;
-
-            if (!data_obj.hasOwnProperty('is_visible')) {
-                data_obj.is_visible = false;
-            }
-
-            if (!data_obj.hasOwnProperty('is_checked')) {
-                data_obj.is_checked = false;
-            }
-
-            if (!data_obj.hasOwnProperty('el')) {
-                data_obj.index = index;
-                data_obj.el = DLMList.create_element(data_obj);
-                visible_changed = true;
-            }
-
-            // temp
-            data_obj.id = data_obj.dlm_id;
-            data_obj.parent = parent;
-
-            var is_visible = (data_obj.os_slug === os);
-
-            if (data_obj.is_visible !== is_visible) {
-                data_obj.is_visible = is_visible;
-                visible_changed = true;
-            }
-
-            /*
-            if (data_obj.is_checked !== is_checked) {
-                data_obj.is_checked = is_checked;
-                data_obj.checked_changed = true;
-            }
-            */
-            
-            if (visible_changed) {
-                changes.push(data_obj);
-            }
-
-            return data_obj;
-        });
-
-        this.build_list(changes);
-    };
-
-    this.build_list = function(changes) {
-
-        /** change this... */
-        if (!changes) {
-            this.container.empty();
-            changes = this.data;
-        }
-
-        for (change of changes) {
-            if (this.container.find('#' + change.dlm_id).length) {
-                if (!change.is_visible) {
-                    change.el.hide();
-                }
-            } else {
-                if (change.is_visible) {
-                    change.el.appendTo(this.container);
-                    change.el.show();
-                }
-            }
-            if (change.is_visible) {
-                change.el.show();
-            }            
-        }
-
-    };
+    this._construct(args);
 };
 
 DLMList.create_element = function(data) {
@@ -347,44 +229,47 @@ DLMList.create_element = function(data) {
     return el;
 };
 
-var DLM = function(parent_el, lists, index) {
+var DLM = function(element, lists, index) {
     this.index = index;
-    this.el = parent_el;
-    this.id = parent_el.id;
+    this.element = element;
+    this.id = element.id;
+    this.lists = lists;
+    this.download_list = [];
+    
+    this.lists = this.lists.map.call(this.lists, (list) => {
+        return new DLMList(list.name, list.data, list.container, this);
+    });
 
-    this.version_select = parent_el.find('.dlm-radio-group[name=\'version-select\']');
-    this.os_select = parent_el.find('select[name=\'os-select\']');
+    let version_select = this.element.find('.dlm-radio-group[name=\'version-select\']');
+    let os_select = this.element.find('select[name=\'os-select\']');
+    let download_button = this.element.find('button');
 
-    this.lists = [];
+    os_select.data('lists', this.lists).on('change', function(e) {
+        for (list of $(this).data('lists')) {
+            list.set_filter('os', $(this).val());
+        }
+    });
 
-    for(i=0; i<lists.length; i++) {
-        var ls = lists[i];
-        console.log('ls', ls);
-        this.lists.push(new DLMList(ls.name, ls.data, ls.container, this));
-    }
+    version_select.data('lists', this.lists).on('change', function(e) {
+        for (list of $(this).data('lists')) {
+            list.set_filter('version', $(this).val());
+        }
+    });
 
-    this.os_select.data('dlm-instance', this);
-    this.version_select.data('dlm-instance',this);
-
-    this.os_select.on('change', function() {
-        $(this).data('dlm-instance').lists.forEach(function(list) {
-            list.filter();
-        });
+    download_button.data('parent',this).on('click', function(e) {
+        let dlm = $(this).data('parent');
+        console.log('download_list', dlm.download_list);
     });
 };
-
-DLM.instances = [];
 
 $(document).ready(function() {
     $('.dlm-block').each(function(index) {
         var lists = [];
-        var parent_el = $(this);
+        var element = $(this);
 
-        var platforms_container = parent_el.find('.dlm-platforms').find('ul');
-        var tools_container = parent_el.find('.dlm-tools').find('ul');
-        var plugins_container = parent_el.find('.dlm-plugins').find('ul');
-
-        console.log(platforms_container);
+        var platforms_container = element.find('.dlm-platforms').find('ul');
+        var tools_container = element.find('.dlm-tools').find('ul');
+        var plugins_container = element.find('.dlm-plugins').find('ul');
 
         lists.push({
             'name': 'platforms',
@@ -409,6 +294,6 @@ $(document).ready(function() {
         plugins_container.attr('data-list-json', null);
 
         // DLM['instances'].push(new DLM(parent_el,lists,index));
-        DLM.instances.push(new DLM(parent_el, lists, index));
+        new DLM(element, lists, index);
     });
 });

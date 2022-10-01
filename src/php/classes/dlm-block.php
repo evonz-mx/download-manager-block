@@ -2,9 +2,6 @@
 
 namespace DLM;
 
-/**
- * 
- */
 Class DLMBlock {
 
     public static $default_options = [

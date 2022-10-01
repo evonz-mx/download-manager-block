@@ -1,10 +1,5 @@
 <?php
-
 namespace DLM;
-
-use DOMDocument;
-use DOMDocumentFragment;
-use DOMElement;
 
 /**
  * class for generating the html 
