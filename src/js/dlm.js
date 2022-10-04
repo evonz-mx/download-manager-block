@@ -136,7 +136,7 @@ var DLMList = function(...args) {
 
     this._construct = function(args_arr) {
         this.title = args_arr[0];
-        this.element = args_arr[2];        
+        this.element = args_arr[2];
         let list_items = args_arr[1];
         this.trash = $('<div style="display:none;"></div>');
         for (let key in list_items) {
@@ -153,7 +153,7 @@ var DLMList = function(...args) {
      * identifiable by key
      */
     this.set_filter = function(key, value) {
-        
+
         if (this.filters.hasOwnProperty(key) && (value !== this.filters[key].value)) {
             this.filters[key].from = this.filters[key].value;
             this.filters[key].changed = true;
@@ -238,7 +238,7 @@ var DLM = function(element, lists, index) {
 
     this.callback = $(element).data('js_callback');
     this.callback_data = $(element).data('js_callback_data');
-    
+
     this.lists = this.lists.map.call(this.lists, (list) => {
         return new DLMList(list.name, list.data, list.container, this);
     });
@@ -260,7 +260,7 @@ var DLM = function(element, lists, index) {
     });
 
     this.download_all = function(list) {
-        let dl_list = list;
+        let dl_list = [].concat(list);
         if (!list.length) return;
 
         function download_next(list) {
@@ -272,7 +272,7 @@ var DLM = function(element, lists, index) {
                 tempLink.style.display = 'none';
                 document.body.appendChild(tempLink);
                 tempLink.setAttribute('href', download_link);
-                tempLink.click();                
+                tempLink.click();
 
                 if (list.length) {
                     download_next(list);

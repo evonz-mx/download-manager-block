@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace DLM;
 
 
 /**
- * 
+ *
  */
 Class DLMBlock_Utils {
 
@@ -47,7 +47,7 @@ Class DLMBlock_Utils {
     /**
      * ensures that slugs are unique
      */
-    public static function uniquify($text, $current_text, $context = 'global', $divider, $i) {
+    public static function uniquify($text, $current_text, $context, $divider, $i) {
         global $dlm_slug_cache;
 
         if (!array_key_exists($context, $dlm_slug_cache)) {
