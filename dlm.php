@@ -18,10 +18,28 @@ require_once('src/php/dlm.php');
 
     <?php
         define('dlm_json_url','8.8.4-1.json');
-        define('dlm_download_domain','https://cdn.hpccsystems.com/');
+        define('base_download_path','https://cdn.hpccsystems.com/');
     ?>
 
-    <?php new DLMBlock(constant('dlm_json_url')); ?>
+    <?php new DLMBlock(constant('dlm_json_url'), [
+      "base_download_path" => constant('base_download_path'),
+      "js_callback" => "some_js_function",
+      "js_callback_data" => [
+        "form_id" => 111
+      ]
+    ]); ?>
+
+    <script>
+      /**
+       * Javascript callback for the download manager
+       */
+      function some_js_function(download_paths, download_trigger, data) {
+        console.log(download_paths); // paths of files to download
+        console.log(data); // data passed to the js_callback_data variable
+        
+        download_trigger(); // triggers the download
+      }
+    </script>
 
     <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 	<script src="src/js/dlm.js"></script>

@@ -7,8 +7,9 @@ Class DLMBlock {
     public static $default_options = [
         "json_file_path" => null,
         "base_download_path" => null,
-        "download_callback" => null,
-        "remove_from_title" => [ "HPCC", "Plugin" ]
+        "remove_from_title" => [ "HPCC", "Plugin" ],
+        "js_callback" => null,
+        "js_callback_data" => null,
     ];
 
     public $dlm_id;    
@@ -80,25 +81,6 @@ Class DLMBlock {
 
         usort($this->os_list, ["DLM\DLMBlock_Utils", "sort_by_title"]);
         usort($this->files_list, ["DLM\DLMBlock_Utils", "sort_by_title"]);
-        
-        
-        /*
-        echo "PLATFORMS:<pre>";
-        var_dump($this->get_file_list('platform'));
-        echo "</pre><br><br>";
-
-        echo "TOOLS:<pre>";
-        var_dump($this->get_file_list('tool'));
-        echo "</pre><br><br>";
-
-        echo "PLUGINS:<pre>";
-        var_dump($this->get_file_list('plugin'));
-        echo "</pre><br><br>";
-
-        echo "OS:<pre>";
-        var_dump($this->os_list);
-        echo "</pre><br><br>";     
-        */       
         
         return $this;
     }

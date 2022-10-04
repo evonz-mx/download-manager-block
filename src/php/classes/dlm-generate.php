@@ -22,6 +22,8 @@ Class DLMBlock_Generator {
         $block = $doc->createElement('div');
         $block->setAttribute('class','dlm-block ' . $dlm_instance->dlm_id);
         $block->setAttribute('id',$dlm_instance->dlm_id);
+        $block->setAttribute('data-js_callback',$dlm_instance->options['js_callback']);
+        $block->setAttribute('data-js_callback_data',json_encode($dlm_instance->options['js_callback_data']));
 
         $container = $doc->createElement('div');
         $container->setAttribute('class', DLMBlock_Generator::pfx('container'));
