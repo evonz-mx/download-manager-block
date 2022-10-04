@@ -229,7 +229,7 @@ DLMList.create_element = function(data) {
     return el;
 };
 
-var DLM = function(element, lists, index) {
+const DLM = function(element, lists, index) {
     this.index = index;
     this.element = element;
     this.id = element.id;
@@ -264,19 +264,18 @@ var DLM = function(element, lists, index) {
         if (!dl_list.length) return;
 
         function download_next(list) {
-            setTimeout(function(list) {
+            const interval = setInterval(function(list) {
                 let download_link = list.pop();
-                let tempLink = document.createElement('a');
 
-                tempLink.setAttribute('download', null);
-                tempLink.style.display = 'none';
-                document.body.appendChild(tempLink);
-                tempLink.setAttribute('href', download_link);
-                tempLink.click();
-
-                if (list.length) {
-                    download_next(list);
+                if(!download_link) {
+                    clearInterval(interval);
+                    return;
                 }
+                const a = document.createElement("a");
+                a.setAttribute('href', download_link);
+                a.setAttribute('download', '');
+                a.click();
+
             }, 100, list);
         };
 
