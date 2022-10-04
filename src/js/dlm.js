@@ -261,7 +261,7 @@ var DLM = function(element, lists, index) {
 
     this.download_all = function(list) {
         let dl_list = [].concat(list);
-        if (!list.length) return;
+        if (!dl_list.length) return;
 
         function download_next(list) {
             setTimeout(function(list) {
