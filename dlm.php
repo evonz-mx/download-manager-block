@@ -22,6 +22,9 @@ require_once('src/php/dlm.php');
     ?>
 
     <?php new DLMBlock(constant('dlm_json_url'), [
+      /**
+        code for instantiating a download manager block
+      **/
       "base_download_path" => constant('base_download_path'),
       "js_callback" => "some_js_function",
       "js_callback_data" => [
@@ -36,7 +39,7 @@ require_once('src/php/dlm.php');
       function some_js_function(download_paths, download_trigger, data) {
         console.log(download_paths); // paths of files to download
         console.log(data); // data passed to the js_callback_data variable
-        
+
         download_trigger(); // triggers the download
       }
     </script>
